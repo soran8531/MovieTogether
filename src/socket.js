@@ -1,8 +1,9 @@
 
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:3001', {
-  autoConnect: true
+const socket = io('https://movietogether-8kcs.onrender.com', {
+  autoConnect: true,
+  transports: ['websocket', 'polling']
 });
 
 export default socket;
