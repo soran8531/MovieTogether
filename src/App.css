@@ -1,0 +1,168 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Vazirmatn', sans-serif;
+  background: #090b13;
+  color: white;
+}
+
+.app {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 80% 40%, #28132b 0%, transparent 45%),
+    radial-gradient(ellipse at 10% 80%, #101c35 0%, transparent 45%),
+    #090b13;
+}
+
+.navbar {
+  height: 85px;
+  padding: 0 8%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #ffffff12;
+}
+
+.navbar h2 {
+  color: #ff526f;
+  font-size: 23px;
+}
+
+.navbar span {
+  color: #aaa;
+  font-size: 14px;
+}
+
+.hero {
+  min-height: 75vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.hero-content {
+  max-width: 750px;
+}
+
+.tag {
+  display: inline-block;
+  background: #ff526f20;
+  color: #ff7187;
+  padding: 10px 22px;
+  border-radius: 30px;
+  margin-bottom: 30px;
+  font-size: 14px;
+}
+
+.hero h1 {
+  font-size: clamp(35px, 6vw, 65px);
+  line-height: 1.7;
+  font-weight: 800;
+  margin-bottom: 15px;
+}
+
+.hero h1 span {
+  color: #ff526f;
+}
+
+.hero p {
+  color: #aaa;
+  font-size: 17px;
+  line-height: 2;
+  margin-bottom: 35px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.primary {
+  background: linear-gradient(135deg, #ff526f, #d82b61);
+  color: white;
+  padding: 15px 40px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  box-shadow: 0 8px 30px #ff526f35;
+}
+
+.primary:hover {
+  transform: translateY(-3px);
+}
+
+.join-box {
+  display: flex;
+  gap: 10px;
+  width: min(100%, 430px);
+  background: #ffffff0b;
+  padding: 8px;
+  border: 1px solid #ffffff20;
+  border-radius: 12px;
+}
+
+.join-box input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  font-family: inherit;
+  padding: 10px;
+  text-align: right;
+}
+
+.join-box button {
+  background: #ffffff18;
+  color: white;
+  border-radius: 8px;
+  padding: 10px 15px;
+}
+
+.join-box button:hover {
+  background: #ff526f;
+}
+
+footer {
+  text-align: center;
+  color: #777;
+  padding: 25px;
+  font-size: 13px;
+}
+
+@media (max-width: 600px) {
+  .navbar {
+    padding: 0 5%;
+  }
+
+  .navbar h2 {
+    font-size: 18px;
+  }
+
+  .navbar span {
+    font-size: 11px;
+  }
+
+  .hero p {
+    font-size: 14px;
+  }
+}
