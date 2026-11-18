@@ -3,6 +3,10 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 const httpServer = createServer(app);
@@ -10,6 +14,21 @@ const httpServer = createServer(app);
 app.use(cors());
 app.use(express.json());
 
+// نمایش فایل‌های ساخته‌شده React
+const distPath = path.join(__dirname, 'dist');
+
+app.use(express.static(distPath));
+
+app.get('/health', (req, res) => {
+  res.send('MovieTogether Server is running 🎬');
+});
+
+// نمایش صفحه React برای مسیرهای سایت
+app.get('/{*splat}', (req, res) => {
+  res.sendFile(path.join(distPath, 'index.html'));
+});
+
+// راه‌اندازی Socket.IO
 const io = new Server(httpServer, {
   cors: {
     origin: '*',
@@ -32,14 +51,10 @@ function generateRoomCode() {
   return code;
 }
 
-app.get('/', (req, res) => {
-  res.send('MovieTogether Server is running 🎬');
-});
-
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
 
-  // ارسال لینک فیلم برای نفر دوم
+  // ارسال لینک فیلم
   socket.on('video-url', (data) => {
     const roomCode = String(data?.roomCode || '')
       .trim()
@@ -53,10 +68,10 @@ io.on('connection', (socket) => {
 
     socket.to(roomCode).emit('video-url', { url });
 
-    console.log('Video URL sent to room:', roomCode);
+    console.log('Video URL sent:', roomCode);
   });
 
-  // ساخت اتاق جدید
+  // ساخت اتاق
   socket.on('create-room', () => {
     const code = generateRoomCode();
 
@@ -97,10 +112,10 @@ io.on('connection', (socket) => {
     socket.emit('room-joined', roomCode);
     socket.to(roomCode).emit('friend-joined');
 
-    console.log('User joined room:', roomCode);
+    console.log('User joined:', roomCode);
   });
 
-  // ارسال پیام چت
+  // چت
   socket.on('chat-message', (data) => {
     const roomCode = String(data?.roomCode || '')
       .toUpperCase();
@@ -123,7 +138,7 @@ io.on('connection', (socket) => {
     });
   });
 
-  // هماهنگ‌سازی کنترل‌های ویدئو
+  // هماهنگی پخش فیلم
   socket.on('video-control', (data) => {
     const roomCode = String(data?.roomCode || '')
       .toUpperCase();
@@ -151,7 +166,7 @@ io.on('connection', (socket) => {
     });
   });
 
-  // قطع اتصال کاربر
+  // قطع اتصال
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
 

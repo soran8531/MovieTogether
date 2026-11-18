@@ -1,7 +1,11 @@
 
 import { io } from 'socket.io-client';
 
-const socket = io('https://movietogether-8kcs.onrender.com', {
+const serverURL = import.meta.env.PROD
+  ? window.location.origin
+  : 'http://localhost:3001';
+
+const socket = io(serverURL, {
   autoConnect: true,
   transports: ['websocket', 'polling']
 });
