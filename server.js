@@ -5,6 +5,7 @@ import { Server } from 'socket.io';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { execFile } from 'node:child_process';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -13,6 +14,17 @@ const httpServer = createServer(app);
 
 app.use(cors());
 app.use(express.json());
+
+// بررسی نصب و اجرای FFmpeg در سرور
+execFile('ffmpeg', ['-version'], { timeout: 10000 }, (error, stdout) => {
+  if (error) {
+    console.error('FFmpeg is NOT available:', error.message);
+    return;
+  }
+
+  const version = stdout.split('\n')[0];
+  console.log('FFmpeg is available:', version);
+});
 
 // نمایش فایل‌های ساخته‌شده React
 const distPath = path.join(__dirname, 'dist');
