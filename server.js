@@ -15,16 +15,60 @@ const httpServer = createServer(app);
 app.use(cors());
 app.use(express.json());
 
-// بررسی نصب و اجرای FFmpeg در سرور
+// بررسی نصب FFmpeg
 execFile('ffmpeg', ['-version'], { timeout: 10000 }, (error, stdout) => {
   if (error) {
     console.error('FFmpeg is NOT available:', error.message);
     return;
   }
 
-  const version = stdout.split('\n')[0];
-  console.log('FFmpeg is available:', version);
+  console.log('FFmpeg is available:', stdout.split('\n')[0]);
 });
+
+// بررسی دسترسی سرور به لینک نمونه MKV
+async function checkVideoSource() {
+  const videoUrl =
+    'https://bnrhd3fvb374s4bkwzxm54xf.abrtech.top/pnot/Movie/2026/Steps.2026/Sub/Steps.2026.720p.WEB-DL.YIFY.Farsi.Sub.Film2Media.mkv?v=744579653857';
+
+  console.log('Checking MKV source access...');
+
+  try {
+    const response = await fetch(videoUrl, {
+      method: 'GET',
+      headers: {
+        Range: 'bytes=0-0'
+      },
+      signal: AbortSignal.timeout(15000),
+      redirect: 'manual'
+    });
+
+    console.log('MKV source HTTP status:', response.status);
+    console.log('MKV source content-type:',
+      response.headers.get('content-type'));
+    console.log('MKV source content-length:',
+      response.headers.get('content-length'));
+    console.log('MKV source content-range:',
+      response.headers.get('content-range'));
+    console.log('MKV source accept-ranges:',
+      response.headers.get('accept-ranges'));
+
+    if (response.body) {
+      await response.body.cancel();
+    }
+
+    if (response.status === 206) {
+      console.log('MKV source supports HTTP Range requests.');
+    } else if (response.status === 200) {
+      console.log('WARNING: Source did not honor the Range request.');
+    } else {
+      console.log('WARNING: MKV source returned an unexpected status.');
+    }
+  } catch (error) {
+    console.error('MKV source check failed:', error.message);
+  }
+}
+
+checkVideoSource();
 
 // نمایش فایل‌های ساخته‌شده React
 const distPath = path.join(__dirname, 'dist');
