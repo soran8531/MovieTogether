@@ -39,7 +39,7 @@ async function checkVideoSource() {
         Range: 'bytes=0-0'
       },
       signal: AbortSignal.timeout(15000),
-      redirect: 'manual'
+      redirect: 'follow'
     });
 
     console.log('MKV source HTTP status:', response.status);
